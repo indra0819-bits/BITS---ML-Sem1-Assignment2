@@ -2,59 +2,65 @@
 
 ## Machine Learning Classification Assignment
 
+**Streamlit ML Model Comparison Dashboard**
+
 ---
 
 # a) Problem Statement
 
-The objective of this assignment is to build and evaluate multiple Machine Learning classification models on a public dataset.
+The objective of this assignment is to design and implement a complete Machine Learning classification pipeline and deploy it using Streamlit.
+
 The application must:
 
-• Support both **binary and multi-class classification**
-• Train **6 different ML models** on the **same dataset**
-• Evaluate models using standard classification metrics
-• Deploy the solution using **Streamlit**
-
-For this implementation, two datasets were used:
-
-1. **Default Dataset** – Breast Cancer Wisconsin dataset (Scikit-learn)
-2. **Custom Dataset** – Titanic Survival Dataset (Kaggle)
-
-The Streamlit app allows:
-
-* Running models on default dataset
-* Uploading any CSV dataset and running the full pipeline
+• Train **6 classification models** on the **same dataset**
+• Evaluate using standard ML metrics
+• Support **binary and multi-class datasets**
+• Allow users to **upload any dataset and evaluate models interactively**
 
 ---
 
 # b) Dataset Description
 
-## 1) Breast Cancer Dataset (Default)
+## Primary Dataset — Breast Cancer Wisconsin (Default Tab)
 
-Source: Scikit-learn built-in dataset
+Source: Scikit-learn Built-in Dataset
 
-| Attribute | Value              |
-| --------- | ------------------ |
-| Samples   | 569                |
-| Features  | 30                 |
-| Classes   | 2                  |
-| Target    | Malignant / Benign |
+| Attribute | Value               |
+| --------- | ------------------- |
+| Samples   | 569                 |
+| Features  | 30                  |
+| Classes   | 2                   |
+| Target    | Malignant vs Benign |
 
-This dataset is commonly used for binary classification problems in healthcare.
+This dataset is widely used in medical diagnosis classification problems.
+
+The **Default tab of the Streamlit app automatically trains and evaluates all models on this dataset.**
 
 ---
 
-## 2) Titanic Dataset (Advanced Upload)
+## Advanced Tab — Upload Any Dataset
 
-Source: Kaggle Titanic Survival Dataset
+The application also provides an **Advanced Upload tab** where users can:
 
-| Attribute               | Value                   |
-| ----------------------- | ----------------------- |
-| Samples                 | 891                     |
-| Features after encoding | 1730                    |
-| Classes                 | 2                       |
-| Target                  | Survived / Not Survived |
+• Upload any CSV dataset (Kaggle / UCI)
+• Automatically detect target column
+• Handle missing values
+• Apply feature encoding & scaling
+• Compare all 6 models interactively
 
-The dataset predicts whether a passenger survived the Titanic disaster based on demographic and travel features.
+This makes the app reusable for any classification dataset.
+
+---
+
+## Validation Dataset — Titanic Survival Dataset
+
+To validate the flexibility of the app, the **Titanic dataset** from Kaggle was uploaded and tested using the Advanced tab.
+
+| Attribute | Value                   |
+| --------- | ----------------------- |
+| Samples   | 891                     |
+| Classes   | 2                       |
+| Target    | Survived / Not Survived |
 
 ---
 
@@ -73,66 +79,78 @@ The following **6 Machine Learning models** were implemented:
 
 # Evaluation Metrics
 
-Each model was evaluated using:
+All models are evaluated using:
 
-| Metric            | Description                        |
-| ----------------- | ---------------------------------- |
-| Accuracy          | Overall correctness of model       |
-| AUC               | Ability to distinguish classes     |
-| Precision (Macro) | Correct positive predictions       |
-| Recall (Macro)    | Ability to capture positives       |
-| F1 Score (Macro)  | Balance between Precision & Recall |
-| MCC               | Balanced correlation metric        |
+| Metric            | Description                    |
+| ----------------- | ------------------------------ |
+| Accuracy          | Overall prediction correctness |
+| AUC               | Ability to distinguish classes |
+| Precision (Macro) | Correct positive predictions   |
+| Recall (Macro)    | Ability to capture positives   |
+| F1 Score (Macro)  | Balance of Precision & Recall  |
+| MCC               | Balanced correlation metric    |
 
 ---
 
-# d) Model Comparison Table (Titanic Dataset)
+# d) Model Comparison Table
 
-| ML Model Name       | Accuracy | AUC    | Precision | Recall | F1     | MCC    |
-| ------------------- | -------- | ------ | --------- | ------ | ------ | ------ |
-| Logistic Regression | 0.7933   | 0.7952 | 0.9016    | 0.5034 | 0.5034 | 0.4391 |
-| Decision Tree       | 0.7318   | 0.6960 | 0.6447    | 0.5392 | 0.5392 | 0.2687 |
-| KNN                 | 0.7263   | 0.6866 | 0.2421    | 0.2805 | 0.2805 | 0.0000 |
-| Naive Bayes         | 0.4302   | 0.7486 | 0.6889    | 0.4534 | 0.4534 | 0.3618 |
-| Random Forest       | 0.7263   | 0.7887 | 0.2421    | 0.2805 | 0.2805 | 0.0000 |
-| XGBoost             | 0.7709   | 0.8377 | 0.7057    | 0.6050 | 0.6050 | 0.4002 |
+## Results on Breast Cancer Dataset (Default Tab)
+
+| ML Model Name       | Accuracy   | AUC        | Precision  | Recall     | F1         | MCC        |
+| ------------------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
+| Logistic Regression | **0.9825** | **0.9954** | **0.9812** | **0.9812** | **0.9812** | **0.9623** |
+| XGBoost             | 0.9649     | 0.9934     | 0.9737     | 0.9524     | 0.9615     | 0.9258     |
+| KNN                 | 0.9561     | 0.9788     | 0.9551     | 0.9504     | 0.9526     | 0.9054     |
+| Random Forest       | 0.9474     | 0.9934     | 0.9435     | 0.9435     | 0.9435     | 0.8869     |
+| Naive Bayes         | 0.9386     | 0.9878     | 0.9360     | 0.9315     | 0.9337     | 0.8676     |
+| Decision Tree       | 0.9123     | 0.9157     | 0.9019     | 0.9157     | 0.9075     | 0.8174     |
+
+---
+
+# Validation Results — Titanic Dataset (Advanced Tab)
+
+| ML Model Name       | Accuracy | AUC        | Precision | Recall | F1     | MCC    |
+| ------------------- | -------- | ---------- | --------- | ------ | ------ | ------ |
+| Logistic Regression | 0.7933   | 0.7952     | 0.9016    | 0.5034 | 0.5034 | 0.4391 |
+| XGBoost             | 0.7709   | **0.8377** | 0.7057    | 0.6050 | 0.6050 | 0.4002 |
+| Decision Tree       | 0.7318   | 0.6960     | 0.6447    | 0.5392 | 0.5392 | 0.2687 |
+| KNN                 | 0.7263   | 0.6866     | 0.2421    | 0.2805 | 0.2805 | 0.0000 |
+| Random Forest       | 0.7263   | 0.7887     | 0.2421    | 0.2805 | 0.2805 | 0.0000 |
+| Naive Bayes         | 0.4302   | 0.7486     | 0.6889    | 0.4534 | 0.4534 | 0.3618 |
 
 ---
 
 # Observations About Model Performance
 
-| ML Model            | Observation                                                                                                               |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| Logistic Regression | Best overall balance of performance. High precision and strong MCC indicate good generalization and balanced predictions. |
-| Decision Tree       | Moderate performance. Captures nonlinear patterns but prone to overfitting.                                               |
-| KNN                 | Poor performance due to high dimensionality (1730 features). Suffers from curse of dimensionality.                        |
-| Naive Bayes         | Very low accuracy but reasonable AUC, indicating probability ranking ability despite poor classification.                 |
-| Random Forest       | Accuracy decent but poor macro metrics suggest class imbalance and weak minority class prediction.                        |
-| XGBoost             | Best AUC score. Strong probability ranking and good overall performance, second best model after Logistic Regression.     |
+| ML Model            | Observation                                                                                                       |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Logistic Regression | Best overall performer on Breast Cancer dataset. Excellent accuracy, AUC, and MCC indicate strong generalization. |
+| XGBoost             | Highest AUC on Titanic dataset and strong performance overall. Excellent probability ranking ability.             |
+| KNN                 | Performs well on low-dimensional data (Breast Cancer) but struggles with high-dimensional Titanic dataset.        |
+| Naive Bayes         | Performs consistently but assumes feature independence, limiting performance.                                     |
+| Random Forest       | Strong ensemble model but slightly lower than Logistic Regression on this dataset.                                |
+| Decision Tree       | Lowest performance due to overfitting tendency.                                                                   |
 
 ---
 
 # Streamlit Application Features
 
-The deployed application supports:
-
-### Default Tab
+## Default Tab
 
 • Runs all models on Breast Cancer dataset
-• Displays metrics sequentially for each model
+• Displays model results sequentially
+• Metrics dashboard + confusion matrices
 
-### Advanced Upload Tab
+## Advanced Upload Tab
 
-• Upload any CSV dataset
-• Automatic target detection
-• Missing value handling
-• Feature scaling toggle
+• Upload any dataset of choice
+• Automatic preprocessing
 • Model comparison dashboard
 • Export metrics & classification reports
 
 ---
 
-# How to Run the App
+# How to Run
 
 Install dependencies:
 
@@ -146,7 +164,7 @@ Run Streamlit:
 streamlit run app.py
 ```
 
-Open browser:
+Open:
 
 ```
 http://localhost:8501
@@ -156,11 +174,5 @@ http://localhost:8501
 
 # Conclusion
 
-This project demonstrates a complete end-to-end Machine Learning pipeline including:
-
-• Data preprocessing
-• Model training and evaluation
-• Performance comparison
-• Interactive deployment using Streamlit
-
-The comparison shows that **Logistic Regression and XGBoost** perform best for the Titanic dataset, while **KNN struggles in high-dimensional feature space**.
+This project demonstrates a full end-to-end ML pipeline with deployment.
+The application is reusable for **any classification dataset** and provides an **interactive comparison dashboard** for multiple models.
