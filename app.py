@@ -21,7 +21,7 @@ from model.models import (
 # Page Config
 # -------------------------
 st.set_page_config(page_title="ML Classification Benchmark (Advanced)", layout="wide")
-st.title("ML Classification Benchmark — Advanced Upload Only")
+st.title("ML Classification Benchmark")
 
 # -------------------------
 # Session State
