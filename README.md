@@ -157,7 +157,3 @@ project-folder/
 ```
 
 ---
-
-This README now fully matches the assignment rubric ✔
-
----
