@@ -312,42 +312,78 @@ if state["last_signature"] is not None and state["last_signature"] != signature:
 state["last_signature"] = signature
 state["active_source"] = active_source
 
+
+# -------------------------
+# Cache Code
+# -------------------------
+
+@st.cache_data(show_spinner=False)
+def cached_training(X, y, class_labels, params):
+    from sklearn.model_selection import train_test_split
+    
+    stratify_val = y if params["use_stratify"] and len(np.unique(y)) > 1 else None
+    
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y,
+        test_size=params["test_size"],
+        random_state=params["random_state"],
+        stratify=stratify_val
+    )
+
+    models = build_models(
+        n_classes=len(class_labels),
+        random_state=params["random_state"],
+        use_scaling=params["use_scaling"],
+        lr_c=params["lr_c"],
+        dt_max_depth=params["dt_max_depth"],
+        dt_min_samples_split=params["dt_min_samples_split"],
+        knn_k=params["knn_k"],
+        rf_n_estimators=params["rf_n_estimators"],
+        rf_max_depth=params["rf_max_depth"],
+        xgb_n_estimators=params["xgb_n_estimators"],
+        xgb_max_depth=params["xgb_max_depth"],
+        xgb_learning_rate=params["xgb_learning_rate"],
+        xgb_subsample=params["xgb_subsample"],
+        xgb_colsample_bytree=params["xgb_colsample_bytree"],
+    )
+
+    metrics_df, results, reports = evaluate_all_models(
+        X_train, X_test, y_train, y_test, models, class_labels
+    )
+
+    return metrics_df, results, reports, X_test, y_test
+
+
+
+
 # -------------------------
 # Train & Evaluate
 # -------------------------
 if run_btn:
     ensure_model_dir()
 
-    stratify_val = None
-    warn = None
-    if use_stratify and n_classes > 1:
-        stratify_val, warn = safe_stratify(y, test_size)
-    if warn:
-        st.warning(warn)
+    params = {
+        "test_size": test_size,
+        "random_state": random_state,
+        "use_stratify": use_stratify,
+        "use_scaling": use_scaling,
+        "lr_c": lr_c,
+        "dt_max_depth": dt_max_depth,
+        "dt_min_samples_split": dt_min_samples_split,
+        "knn_k": knn_k,
+        "rf_n_estimators": rf_n_estimators,
+        "rf_max_depth": rf_max_depth,
+        "xgb_n_estimators": xgb_n_estimators,
+        "xgb_max_depth": xgb_max_depth,
+        "xgb_learning_rate": xgb_learning_rate,
+        "xgb_subsample": xgb_subsample,
+        "xgb_colsample_bytree": xgb_colsample_bytree,
+    }
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=test_size, random_state=random_state, stratify=stratify_val
-    )
-
-    models = build_models(
-        n_classes=n_classes,
-        random_state=random_state,
-        use_scaling=use_scaling,
-        lr_c=lr_c,
-        dt_max_depth=dt_max_depth,
-        dt_min_samples_split=dt_min_samples_split,
-        knn_k=knn_k,
-        rf_n_estimators=rf_n_estimators,
-        rf_max_depth=rf_max_depth,
-        xgb_n_estimators=xgb_n_estimators,
-        xgb_max_depth=xgb_max_depth,
-        xgb_learning_rate=xgb_learning_rate,
-        xgb_subsample=xgb_subsample,
-        xgb_colsample_bytree=xgb_colsample_bytree,
-    )
-
-    with st.spinner("Training models..."):
-        metrics_df, results, reports = evaluate_all_models(X_train, X_test, y_train, y_test, models, class_labels)
+    with st.spinner("Training models (cached)..."):
+        metrics_df, results, reports, X_test, y_test = cached_training(
+            X, y, class_labels, params
+        )
 
     state["metrics_df"] = metrics_df
     state["results"] = results
@@ -356,7 +392,7 @@ if run_btn:
     state["X_test"] = X_test
     state["y_test"] = y_test
 
-    st.success("Training complete! ✅")
+    st.success("Training complete (cached)! 🚀")
 
 # -------------------------
 # Display Results
