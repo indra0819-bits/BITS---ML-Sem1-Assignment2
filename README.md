@@ -1,5 +1,3 @@
----
-
 # ML Classification Benchmark Web App
 
 **BITS Pilani – Machine Learning Assignment 2**
